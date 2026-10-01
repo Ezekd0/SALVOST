@@ -1,0 +1,46 @@
+{
+  "account": "ui_verify_0930200352",
+  "registration": true,
+  "login": true,
+  "me": true,
+  "scenarios": [
+    {
+      "scenario": "Benign",
+      "classification": "Benign",
+      "shap_features": 4,
+      "event_id": 18
+    },
+    {
+      "scenario": "Port Scan",
+      "classification": "Port Scan",
+      "shap_features": 4,
+      "event_id": 19
+    },
+    {
+      "scenario": "Brute Force",
+      "classification": "Brute Force",
+      "shap_features": 4,
+      "event_id": 20
+    },
+    {
+      "scenario": "DDoS",
+      "classification": "DDoS",
+      "shap_features": 4,
+      "event_id": 21
+    },
+    {
+      "scenario": "Malware Traffic",
+      "classification": "Malware Traffic",
+      "shap_features": 4,
+      "event_id": 22
+    }
+  ],
+  "incidents": 4,
+  "responses": 4,
+  "summary": {
+    "eventsAnalyzed": 5,
+    "threatsDetected": 4,
+    "criticalIncidents": 2,
+    "contained": 3
+  }
+}

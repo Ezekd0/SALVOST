@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.AICTDRS" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#030910</item>
+        <item name="android:statusBarColor">#030910</item>
+        <item name="android:navigationBarColor">#030910</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

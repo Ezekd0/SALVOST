@@ -1,0 +1,39 @@
+node_modules/
+frontend/node_modules/
+android/.gradle/
+android/build/
+android/app/build/
+backend/venv/
+.env
+*.db
+__pycache__/
+
+# Local environment
+.env
+*.env
+frontend/.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+
+# Frontend generated files
+frontend/dist/
+frontend/node_modules/
+
+# Python virtual environment
+backend/venv/
+venv/
+
+# Local runtime URLs
+backend/backend_url.txt
+frontend/frontend_url.txt
