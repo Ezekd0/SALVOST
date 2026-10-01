@@ -16,21 +16,18 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 
-const configuredApkUrl = (import.meta.env.VITE_ANDROID_APK_URL || "").trim();
-// Accept an HTTPS release asset or a same-origin absolute path, never a script URL.
-export const androidApkUrl = /^(https:\/\/|\/(?!\/))/.test(configuredApkUrl)
-  ? configuredApkUrl
-  : "";
+export const androidApkUrl =
+  "https://github.com/Ezekd0/SALVOST/releases/latest/download/AI-CTDRS-v1.0.0.apk";
 
 export function DownloadButton({ compact = false }: { compact?: boolean }) {
   const label = compact ? "Download App" : "Download Android App";
-  return androidApkUrl ? (
-    <a className="lp-button lp-primary" href={androidApkUrl}>
-      <ArrowDownToLine size={17} />
-      {label}
-    </a>
-  ) : (
-    <a className="lp-button lp-primary" href="#android">
+  return (
+    <a
+      className="lp-button lp-primary"
+      href={androidApkUrl}
+      target="_blank"
+      rel="noreferrer"
+    >
       <ArrowDownToLine size={17} />
       {label}
     </a>
