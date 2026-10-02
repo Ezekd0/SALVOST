@@ -27,7 +27,6 @@ import {
   PhonePreview,
   SectionHeading,
   SecurityVisual,
-  androidApkUrl,
 } from "../components/landing/LandingComponents";
 import "./Landing.css";
 
@@ -114,14 +113,10 @@ export default function Landing() {
               <span /> INTELLIGENCE BEHIND EVERY SIGNAL
             </span>
             <h1>
-              AI-Powered Cyber
-              <br />
-              <span>Threat Detection</span>
-              <br />
-              &amp; Response
+              AI-DRIVEN ANDROID RUNTIME THREAT DETECTION AND AUTONOMOUS RESPONSE SYSTEM
             </h1>
             <p>
-              Turn security events into actionable understanding. AI-CTDRS
+              Turn security events into actionable understanding. AI-DRIVEN ANDROID RUNTIME THREAT DETECTION AND AUTONOMOUS RESPONSE SYSTEM
               brings AI detection, explainable insights, and incident response
               into one connected security workspace.
             </p>
@@ -341,9 +336,7 @@ export default function Landing() {
               </ul>
               <DownloadButton />
               <p className="lp-download-note" role="status">
-                {androidApkUrl
-                  ? "Android APK · available from the configured download location."
-                  : "The Android download is not available yet. A release link will appear here when published."}
+                Android APK · available from the published release.
               </p>
             </div>
           </div>
@@ -437,9 +430,7 @@ export default function Landing() {
         <div>
           <Brand />
           <p>
-            AI-Driven Cyber Threat Detection
-            <br />
-            and Response System
+            AI-DRIVEN ANDROID RUNTIME THREAT DETECTION AND AUTONOMOUS RESPONSE SYSTEM
           </p>
           <small>An academic software project for explainable security.</small>
         </div>

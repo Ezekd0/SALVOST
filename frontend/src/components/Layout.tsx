@@ -86,7 +86,7 @@ export default function Layout() {
           </div>
           <div className="flex-shrink-0 flex items-center px-4">
             <ShieldAlert className="h-8 w-8 text-teal" />
-            <span className="ml-2 text-xl font-bold text-text-light tracking-wider">AI-CTDRS</span>
+            <span className="ml-2 text-xl font-bold text-text-light tracking-wider">AI-DRIVEN ANDROID RUNTIME THREAT DETECTION AND AUTONOMOUS RESPONSE SYSTEM</span>
           </div>
           <div className="mt-5 flex-1 h-0 overflow-y-auto">
             <nav className="px-2 space-y-1">
@@ -103,7 +103,7 @@ export default function Layout() {
         <div className="flex flex-col w-64">
           <div className="flex items-center h-16 flex-shrink-0 px-4 border-b border-navy-dark bg-[#070F18]">
             <ShieldAlert className="h-8 w-8 text-teal drop-shadow-[0_0_8px_rgba(23,195,178,0.5)]" />
-            <span className="ml-3 text-xl font-bold text-text-light tracking-widest">AI-CTDRS</span>
+            <span className="ml-3 text-xl font-bold text-text-light tracking-widest">AI-DRIVEN ANDROID RUNTIME THREAT DETECTION AND AUTONOMOUS RESPONSE SYSTEM</span>
           </div>
           <div className="flex-1 flex flex-col overflow-y-auto pt-5 pb-4">
             <nav className="flex-1 px-2 space-y-1">

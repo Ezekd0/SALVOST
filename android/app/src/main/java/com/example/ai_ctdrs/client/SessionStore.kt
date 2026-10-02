@@ -32,7 +32,7 @@ class SessionStore(private val context: Context) {
             cipher.init(Cipher.DECRYPT_MODE, key(), GCMParameterSpec(128, bytes.copyOfRange(0, 12)))
             String(cipher.doFinal(bytes.copyOfRange(12, bytes.size)), Charsets.UTF_8)
         }.getOrNull() }
-        return (prefs[urlKey] ?: "http://10.0.2.2:8000/") to token
+        return (prefs[urlKey] ?: "https://ai-ctdrs-backend.onrender.com/") to token
     }
     suspend fun saveToken(token: String?) {
         val encrypted = token?.let {

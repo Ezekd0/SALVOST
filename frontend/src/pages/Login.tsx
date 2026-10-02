@@ -53,10 +53,10 @@ export default function Login() {
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-text-light tracking-tight">
-          AI-CTDRS SOC
+          AI-DRIVEN ANDROID RUNTIME THREAT DETECTION AND AUTONOMOUS RESPONSE SYSTEM
         </h2>
         <p className="mt-2 text-center text-sm text-text-muted">
-          Cognitive Threat Detection & Response System
+          AI-DRIVEN ANDROID RUNTIME THREAT DETECTION AND AUTONOMOUS RESPONSE SYSTEM
         </p>
       </div>
 

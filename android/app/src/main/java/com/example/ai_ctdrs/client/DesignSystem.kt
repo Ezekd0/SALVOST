@@ -48,8 +48,8 @@ internal fun severityColor(value: String) = when(value.lowercase()) { "critical"
         singleLine = true, shape = RoundedCornerShape(14.dp), colors = OutlinedTextFieldDefaults.colors(unfocusedContainerColor = com.example.ai_ctdrs.theme.Panel, focusedContainerColor = com.example.ai_ctdrs.theme.Panel, unfocusedBorderColor = Color(0xFF1A2535)), modifier = Modifier.fillMaxWidth())
 }
 @Composable internal fun Brand(large: Boolean = false) {
-    if(large) Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) { SecurityArt(Modifier.size(88.dp), "logo"); Text("AI-CTDRS", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) }
-    else Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) { SecurityArt(Modifier.size(34.dp), "logo"); Text("AI-CTDRS", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold) }
+    if(large) Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) { SecurityArt(Modifier.size(88.dp), "logo"); Text("AI-DRIVEN ANDROID RUNTIME THREAT DETECTION AND AUTONOMOUS RESPONSE SYSTEM", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) }
+    else Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) { SecurityArt(Modifier.size(34.dp), "logo"); Text("AI-DRIVEN ANDROID RUNTIME THREAT DETECTION AND AUTONOMOUS RESPONSE SYSTEM", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold) }
 }
 // Vector artwork scales with the phone, with no screenshot text or device chrome baked in.
 @Composable internal fun SecurityArt(modifier: Modifier = Modifier, kind: String = "shield") {

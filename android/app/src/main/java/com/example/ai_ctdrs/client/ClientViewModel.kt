@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 data class ClientState(
-    val scanning: Boolean = false, val busy: Boolean = true, val error: String? = null, val url: String = "http://10.0.2.2:8000/",
+    val scanning: Boolean = false, val busy: Boolean = true, val error: String? = null, val url: String = "https://ai-ctdrs-backend.onrender.com/",
     val user: User? = null, val summary: Summary? = null, val health: String = "Not checked",
     val incidents: List<Incident> = emptyList(), val responses: List<ResponseAction> = emptyList(),
     val events: List<Event> = emptyList(), val result: Event? = null, val selected: Incident? = null
