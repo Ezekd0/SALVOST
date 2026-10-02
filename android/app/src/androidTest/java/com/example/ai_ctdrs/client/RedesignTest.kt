@@ -21,7 +21,7 @@ class RedesignTest {
             rule.onNodeWithContentDescription("Choose scenario").performClick()
             val name=if(scenario==Scenario.BENIGN) "Normal Traffic / Benign" else scenario.title
             rule.onAllNodesWithText(name).onLast().performClick()
-            rule.onNodeWithText("Start Scan").performScrollTo().performClick()
+            rule.onNodeWithText("Run Test").performScrollTo().performClick()
             rule.runOnIdle { assertEquals(scenario,submitted);assertTrue(submitted!!.telemetry.is_demo) }
         }
     }

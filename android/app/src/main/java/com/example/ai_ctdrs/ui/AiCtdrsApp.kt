@@ -354,11 +354,11 @@ fun DashboardScreen(viewModel: AppViewModel, uiState: AppUiState) {
 @Composable
 fun ScanScreen(viewModel: AppViewModel, uiState: AppUiState) {
     val scenarioOptions = listOf(
-        "Normal Traffic" to EventRequest("10.0.2.15", "10.0.2.2", 443, "TCP", 120.0, 18.0, 800.0, true),
-        "Port Scan" to EventRequest("10.0.2.16", "10.0.2.2", 40000, "TCP", 8.0, 600.0, 1200.0, true),
-        "Brute Force" to EventRequest("10.0.2.17", "10.0.2.2", 22, "TCP", 1800.0, 15.0, 220.0, true),
-        "DDoS" to EventRequest("10.0.2.18", "10.0.2.2", 80, "UDP", 50.0, 4900.0, 52000.0, true),
-        "Malware Traffic" to EventRequest("10.0.2.19", "10.0.2.2", 8080, "TCP", 5000.0, 22.0, 260.0, true),
+        "Normal Traffic" to EventRequest("192.0.2.15", "198.51.100.2", 443, "TCP", 120.0, 18.0, 800.0, true),
+        "Port Scan" to EventRequest("192.0.2.16", "198.51.100.2", 40000, "TCP", 8.0, 600.0, 1200.0, true),
+        "Brute Force" to EventRequest("192.0.2.17", "198.51.100.2", 22, "TCP", 1800.0, 15.0, 220.0, true),
+        "DDoS" to EventRequest("192.0.2.18", "198.51.100.2", 80, "UDP", 50.0, 4900.0, 52000.0, true),
+        "Malware Traffic" to EventRequest("192.0.2.19", "198.51.100.2", 8080, "TCP", 5000.0, 22.0, 260.0, true),
     )
     var selectedScenario by remember { mutableStateOf(scenarioOptions.first()) }
 

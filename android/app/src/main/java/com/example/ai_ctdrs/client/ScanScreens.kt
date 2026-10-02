@@ -21,32 +21,32 @@ import kotlin.math.abs
 
 @Composable internal fun ScanScreen(s:ClientState,start:(Scenario)->Unit) {
     var selected by rememberSaveable {mutableStateOf(Scenario.BENIGN)};var expanded by remember {mutableStateOf(false)}
-    Heading("Threat Scan");Caption("Analyze a controlled traffic profile using AI detection.")
+    Heading("Controlled Detection Test");Caption("Analyze a predefined traffic profile using the existing AI detection service.")
     SecurityArt(Modifier.fillMaxWidth().height(260.dp),"radar")
     Panel {Caption("Scan type");Box {TextButton(onClick={expanded=true},enabled=!s.busy,modifier=Modifier.fillMaxWidth()){Text(if(selected==Scenario.BENIGN) "Normal Traffic / Benign" else selected.title,modifier=Modifier.weight(1f));Icon(Icons.Outlined.ExpandMore,"Choose scenario")};DropdownMenu(expanded=expanded,onDismissRequest={expanded=false}){Scenario.entries.forEach {scenario->DropdownMenuItem(text={Text(if(scenario==Scenario.BENIGN) "Normal Traffic / Benign" else scenario.title)},onClick={selected=scenario;expanded=false})}}}}
     Badge("Controlled testing");Caption("Submits sample telemetry to the backend. This does not scan your phone or generate a real attack.")
-    Primary("Start Scan",!s.busy){start(selected)}
+    Primary("Run Test",!s.busy){start(selected)}
 }
 @Composable internal fun ScanningScreen(s:ClientState,stop:()->Unit,navigate:(String)->Unit) {
     var progress by remember {mutableFloatStateOf(.02f)}
-    LaunchedEffect(s.scanning) {if(s.scanning) {while(true){delay(350);progress=(progress+(.92f-progress)*.07f).coerceAtMost(.92f)}} else navigate(if(s.result!=null) "Scan Results" else "Scan")}
+    LaunchedEffect(s.scanning) {if(s.scanning) {while(true){delay(350);progress=(progress+(.92f-progress)*.07f).coerceAtMost(.92f)}} else navigate(if(s.result!=null) "Test Results" else "Testing")}
     BackHandler {stop()}
-    Spacer(Modifier.height(40.dp));Column(Modifier.fillMaxWidth(),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(16.dp)){Heading("Scanning...");Caption("Please wait while we analyze\nyour submitted test telemetry.");Spacer(Modifier.height(24.dp));Box(Modifier.size(230.dp),contentAlignment=Alignment.Center){CircularProgressIndicator(progress={progress},modifier=Modifier.fillMaxSize(),color=Violet,trackColor=com.example.ai_ctdrs.theme.Panel,strokeWidth=14.dp);Text("${(progress*100).toInt()}%",style=MaterialTheme.typography.displaySmall,fontWeight=FontWeight.SemiBold)};Spacer(Modifier.height(24.dp));Caption("Awaiting classification and SHAP insights…");Badge("Estimated progress • result from server")}
-    OutlinedButton(onClick=stop,modifier=Modifier.fillMaxWidth().height(56.dp),shape=RoundedCornerShape(14.dp)){Text("Stop Scan")}
+    Spacer(Modifier.height(40.dp));Column(Modifier.fillMaxWidth(),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(16.dp)){Heading("Testing detection…");Caption("Please wait while we analyze\nyour submitted test telemetry.");Spacer(Modifier.height(24.dp));Box(Modifier.size(230.dp),contentAlignment=Alignment.Center){CircularProgressIndicator(progress={progress},modifier=Modifier.fillMaxSize(),color=Violet,trackColor=com.example.ai_ctdrs.theme.Panel,strokeWidth=14.dp);Text("${(progress*100).toInt()}%",style=MaterialTheme.typography.displaySmall,fontWeight=FontWeight.SemiBold)};Spacer(Modifier.height(24.dp));Caption("Awaiting classification and SHAP insights…");Badge("Estimated progress • result from server")}
+    OutlinedButton(onClick=stop,modifier=Modifier.fillMaxWidth().height(56.dp),shape=RoundedCornerShape(14.dp)){Text("Stop Test")}
     Caption("Stopping ends the wait on this device. Submitted analysis may still complete on the server.")
 }
 @Composable internal fun ResultScreen(s:ClientState,navigate:(String)->Unit,vm:ClientViewModel) {
     val event=s.result
-    if(event==null){EmptyState("No scan result","Start a controlled scan to receive a real analysis.");Primary("Go to Scan"){navigate("Scan")};return}
+    if(event==null){EmptyState("No test result","Run a controlled detection test to receive an analysis.");Primary("Go to Testing"){navigate("Testing")};return}
     val a=event.analysis
-    Row(horizontalArrangement=Arrangement.spacedBy(12.dp),verticalAlignment=Alignment.CenterVertically){Symbol(Icons.Outlined.CheckCircle,Green);Column {Text("Scan completed");Caption(event.timestamp)}}
+    Row(horizontalArrangement=Arrangement.spacedBy(12.dp),verticalAlignment=Alignment.CenterVertically){Symbol(Icons.Outlined.CheckCircle,Green);Column {Text("Test completed");Caption(event.timestamp)}}
     Badge(if(event.is_demo) "Controlled test result" else "Recorded event")
     if(a==null){EmptyState("Analysis unavailable","The event was returned without an analysis. Refresh activity before submitting another test.");return}
     val incident=s.incidents.find {it.analysis_id==a.id};val color=if(a.classification=="Benign") Green else Red
     Panel {Row(horizontalArrangement=Arrangement.spacedBy(12.dp),verticalAlignment=Alignment.CenterVertically){Symbol(Icons.Outlined.Shield,color,56);Column(Modifier.weight(1f)){Heading(a.classification);Caption(if(a.classification=="Benign") "No threat classified in this profile" else "Threat classified in submitted telemetry")}};incident?.let{Badge(it.severity,severityColor(it.severity))}}
     Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(12.dp)){Panel(Modifier.weight(1f)){Text("${"%.1f".format(a.confidence*100)}%",style=MaterialTheme.typography.headlineSmall);Caption("Model confidence")};Panel(Modifier.weight(1f)){Text("${"%.1f".format(a.threat_score)}",style=MaterialTheme.typography.headlineSmall);Caption("Threat score / 100")}}
     Explanation(a)
-    Primary("View Details"){navigate("Threat Details")};OutlinedButton(onClick={navigate("Scan")},modifier=Modifier.fillMaxWidth()){Text("Rescan")}
+    Primary("View Details"){navigate("Threat Details")};OutlinedButton(onClick={navigate("Testing")},modifier=Modifier.fillMaxWidth()){Text("Run another test")}
 }
 @Composable internal fun ThreatDetails(s:ClientState,navigate:(String)->Unit,vm:ClientViewModel) {
     val event=s.result;val a=event?.analysis

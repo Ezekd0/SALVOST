@@ -3,7 +3,7 @@ package com.example.ai_ctdrs.client
 import retrofit2.http.*
 
 data class Token(val access_token: String)
-data class Registration(val full_name: String, val email: String, val username: String, val password: String, val confirm_password: String, val role: String = "analyst")
+data class Registration(val full_name: String, val email: String, val username: String, val password: String, val confirm_password: String)
 data class User(val id: Int, val full_name: String, val username: String, val email: String, val role: String = "analyst", val created_at: String = "")
 data class Summary(val eventsAnalyzed: Int, val threatsDetected: Int, val criticalIncidents: Int, val contained: Int)
 data class Health(val status: String, val service: String)

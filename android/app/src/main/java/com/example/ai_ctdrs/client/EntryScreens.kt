@@ -33,36 +33,26 @@ import com.example.ai_ctdrs.theme.*
     }
 }
 @Composable internal fun AuthScreen(s: ClientState, vm: ClientViewModel) {
-    var register by rememberSaveable { mutableStateOf(false) }; var roles by rememberSaveable { mutableStateOf(false) }; var server by rememberSaveable { mutableStateOf(false) }
+    var register by rememberSaveable { mutableStateOf(false) }; var server by rememberSaveable { mutableStateOf(false) }
     var username by rememberSaveable { mutableStateOf("") }; var name by rememberSaveable { mutableStateOf("") }; var email by rememberSaveable { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }; var confirm by remember { mutableStateOf("") }; var role by rememberSaveable { mutableStateOf("analyst") }
+    var password by remember { mutableStateOf("") }; var confirm by remember { mutableStateOf("") }
     var validation by remember { mutableStateOf<String?>(null) }
-    BackHandler(roles || register || server) { if(server) server=false else if(roles) roles=false else register=false }
+    BackHandler(register || server) { if(server) server=false else register=false }
     Column(Modifier.fillMaxSize().safeDrawingPadding().imePadding().verticalScroll(rememberScrollState()).padding(24.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
         Spacer(Modifier.height(16.dp)); Brand(large=true); Spacer(Modifier.height(16.dp))
         if(s.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
         s.error?.let { Text(it,color=Red) }; validation?.let { Text(it,color=Red) }
         when {
             server -> { Heading("Server connection"); ServerScreen(s,vm); TextButton(onClick={server=false}) { Text("Back to sign in") } }
-            roles -> {
-                Heading("Choose Your Role"); Caption("Select the role recorded on your account. This does not grant additional server permissions.")
-                listOf("administrator" to "Administrator", "analyst" to "Analyst", "security_officer" to "Security Officer", "viewer" to "Viewer").forEach { (key,title) ->
-                    OutlinedCard(onClick={role=key},border=androidx.compose.foundation.BorderStroke(if(role==key) 2.dp else 1.dp,if(role==key) Violet else Color(0xFF26324A)),colors=CardDefaults.outlinedCardColors(containerColor=if(role==key) Violet.copy(alpha=.12f) else com.example.ai_ctdrs.theme.Panel),modifier=Modifier.fillMaxWidth()) {
-                        Row(Modifier.padding(18.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(14.dp)) { Symbol(Icons.Outlined.Badge); Column(Modifier.weight(1f)) { Text(title); Caption("Account role") }; RadioButton(selected=role==key,onClick={role=key}) }
-                    }
-                }
-                Primary("Create Account",!s.busy) { vm.authenticate(username,password,Registration(name.trim(),email.trim(),username.trim(),password,confirm,role)) }
-                TextButton(onClick={roles=false},enabled=!s.busy) { Text("Back to account details") }
-            }
             else -> {
-                Heading(if(register) "Create Account" else "Welcome Back"); Caption(if(register) "Join AI-CTDRS to understand and respond to threats." else "Sign in to continue to your account")
+                Heading(if(register) "Create Account" else "Welcome Back"); Caption(if(register) "Create your protection account. You will be signed in when registration succeeds." else "Sign in to continue to your protection dashboard.")
                 if(register) { Field("Full name",name,icon=Icons.Outlined.Person) {name=it}; Field("Email",email,icon=Icons.Outlined.Email) {email=it} }
                 Field("Username",username) {username=it}; Field("Password",password,secret=true,icon=Icons.Outlined.Lock) {password=it}
                 if(register) Field("Confirm password",confirm,secret=true,icon=Icons.Outlined.Lock) {confirm=it}
                 Spacer(Modifier.height(6.dp))
                 Primary(if(register) "Continue" else "Sign In",!s.busy) {
                     validation = when { username.isBlank() || password.isBlank() -> "Enter your username and password."; register && (name.isBlank() || email.isBlank()) -> "Enter your full name and email."; register && password != confirm -> "Passwords do not match."; else -> null }
-                    if(validation==null) { if(register) roles=true else vm.authenticate(username,password,null) }
+                    if(validation==null) { if(register) vm.authenticate(username,password,Registration(name.trim(),email.trim(),username.trim(),password,confirm)) else vm.authenticate(username,password,null) }
                 }
                 TextButton(onClick={register=!register; validation=null},enabled=!s.busy,modifier=Modifier.align(Alignment.CenterHorizontally)) { Text(if(register) "Already have an account? Sign in" else "Don't have an account? Sign up") }
                 TextButton(onClick={server=true},modifier=Modifier.align(Alignment.CenterHorizontally)) { Icon(Icons.Outlined.Dns,null,modifier=Modifier.size(16.dp)); Spacer(Modifier.width(8.dp)); Text("Server connection",color=Muted) }
@@ -72,6 +62,6 @@ import com.example.ai_ctdrs.theme.*
 }
 @Composable internal fun ServerScreen(s: ClientState, vm: ClientViewModel) {
     var url by remember(s.url) { mutableStateOf(s.url) }
-    Field("Backend URL",url,icon=Icons.Outlined.Dns) {url=it}; Caption("Production: https://salvost.onrender.com/\nFor local development, use your local FastAPI backend URL.")
+    Field("Backend URL",url,icon=Icons.Outlined.Dns) {url=it}; Caption("Production: https://salvost.onrender.com/\nLocal and insecure development URLs are blocked in the production app.")
     Primary("Save & check server",!s.busy) {vm.saveServer(url)}; Caption(s.health); Caption("Changing servers signs you out.")
 }
