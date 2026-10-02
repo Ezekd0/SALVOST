@@ -72,6 +72,6 @@ import com.example.ai_ctdrs.theme.*
 }
 @Composable internal fun ServerScreen(s: ClientState, vm: ClientViewModel) {
     var url by remember(s.url) { mutableStateOf(s.url) }
-    Field("Backend URL",url,icon=Icons.Outlined.Dns) {url=it}; Caption("Production: https://ai-ctdrs-backend.onrender.com/\nFor local development, use your local FastAPI backend URL.")
+    Field("Backend URL",url,icon=Icons.Outlined.Dns) {url=it}; Caption("Production: https://salvost.onrender.com/\nFor local development, use your local FastAPI backend URL.")
     Primary("Save & check server",!s.busy) {vm.saveServer(url)}; Caption(s.health); Caption("Changing servers signs you out.")
 }

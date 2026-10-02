@@ -19,7 +19,7 @@ class SessionStore(private val context: Context) {
     private val urlKey = stringPreferencesKey("backend_url")
 
     companion object {
-        const val PRODUCTION_URL = "https://ai-ctdrs-backend.onrender.com/"
+        const val PRODUCTION_URL = "https://salvost.onrender.com/"
         private val LOCAL_DEVELOPMENT_HOSTS = setOf(
             "10.0.2.2",
             "localhost",
@@ -45,7 +45,7 @@ class SessionStore(private val context: Context) {
                     PRODUCTION_URL
                 } else if (scheme.isBlank()) {
                     PRODUCTION_URL
-                } else if (normalized.equals("https://ai-ctdrs-backend.onrender.com", ignoreCase = true)) {
+                } else if (normalized.equals("https://salvost.onrender.com", ignoreCase = true) || normalized.equals("https://ai-ctdrs-backend.onrender.com", ignoreCase = true)) {
                     PRODUCTION_URL
                 } else {
                     candidate
