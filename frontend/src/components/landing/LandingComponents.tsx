@@ -17,7 +17,7 @@ import {
 import type { ReactNode } from "react";
 
 export const androidApkUrl =
-  "https://github.com/Ezekd0/SALVOST/releases/latest/download/AI-CTDRS-v1.0.0.apk";
+  "https://github.com/Ezekd0/SALVOST/releases/latest/download/AI-CTDRS-v1.0.1.apk";
 
 export function DownloadButton({ compact = false }: { compact?: boolean }) {
   const label = compact ? "Download App" : "Download Android App";
