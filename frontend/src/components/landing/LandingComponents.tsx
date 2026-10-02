@@ -25,7 +25,7 @@ export function DownloadButton({ compact = false }: { compact?: boolean }) {
     <a
       className="lp-button lp-primary"
       href={androidApkUrl}
-      target="_blank"
+      download="AI-CTDRS-v1.0.1.apk"
       rel="noreferrer"
     >
       <ArrowDownToLine size={17} />
