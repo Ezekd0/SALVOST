@@ -66,13 +66,14 @@ interface AiCtdrsApiService {
 object ApiClient {
     fun create(baseUrl: String): AiCtdrsApiService {
         val logging = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BASIC
+            level = HttpLoggingInterceptor.Level.NONE
         }
 
         val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(20, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
+            .callTimeout(45, TimeUnit.SECONDS)
             .addInterceptor(logging)
             .build()
 

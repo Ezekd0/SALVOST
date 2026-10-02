@@ -123,6 +123,6 @@ class AiCtdrsRepository(private val context: Context) {
     }
 
     companion object {
-        const val DEFAULT_BASE_URL = "https://ai-ctdrs-backend.onrender.com"
+        const val DEFAULT_BASE_URL = "https://ai-ctdrs-backend.onrender.com/"
     }
 }

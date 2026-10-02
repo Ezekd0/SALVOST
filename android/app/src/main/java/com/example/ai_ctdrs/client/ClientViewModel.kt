@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 data class ClientState(
-    val scanning: Boolean = false, val busy: Boolean = true, val error: String? = null, val url: String = "https://ai-ctdrs-backend.onrender.com/",
+    val scanning: Boolean = false, val busy: Boolean = true, val error: String? = "Connecting to security service...", val url: String = SessionStore.PRODUCTION_URL + "/",
     val user: User? = null, val summary: Summary? = null, val health: String = "Not checked",
     val incidents: List<Incident> = emptyList(), val responses: List<ResponseAction> = emptyList(),
     val events: List<Event> = emptyList(), val result: Event? = null, val selected: Incident? = null
@@ -30,31 +30,42 @@ class ClientViewModel(app: Application) : AndroidViewModel(app) {
     private var scanJob: Job? = null
     private lateinit var api: CtdrsApi
     private fun connect(url: String) {
-        // Capture credentials per client: changing servers cannot forward a previous server's token.
+        val safeUrl = SessionStore.sanitizeServerUrl(url)
+        val normalizedUrl = safeUrl.trimEnd('/') + "/"
         val credential = token
-        val client = OkHttpClient.Builder().connectTimeout(15, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS)
-            .followRedirects(false).followSslRedirects(false).retryOnConnectionFailure(false)
+        val client = OkHttpClient.Builder().connectTimeout(20, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS).callTimeout(45, TimeUnit.SECONDS)
+            .followRedirects(false).followSslRedirects(false).retryOnConnectionFailure(true)
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
                 if (credential != null) request.header("Authorization", "Bearer $credential")
                 chain.proceed(request.build())
             }.build()
-        api = Retrofit.Builder().baseUrl(url).client(client).addConverterFactory(GsonConverterFactory.create()).build().create(CtdrsApi::class.java)
+        api = Retrofit.Builder().baseUrl(normalizedUrl).client(client).addConverterFactory(GsonConverterFactory.create()).build().create(CtdrsApi::class.java)
     }
     init { work {
         val (url, saved) = store.read(); token = saved; connect(url)
-        mutable.update { it.copy(url = url) }
+        mutable.update { it.copy(url = url, error = "Connecting to security service...") }
         if (token != null) { mutable.update { it.copy(user = api.me()) }; refreshData() }
     } }
     private fun work(block: suspend () -> Unit): Job = viewModelScope.launch {
-        mutable.update { it.copy(busy = true, error = null) }
+        mutable.update { it.copy(busy = true, error = "Connecting to security service...") }
         try { block() } catch (e: CancellationException) { throw e } catch (e: Exception) {
             if (e is HttpException && e.code() == 401) {
                 token = null; store.saveToken(null); connect(mutable.value.url)
-                mutable.value = ClientState(busy = true, url = mutable.value.url, error = "Sign in again. Your session expired or credentials were incorrect.")
+                mutable.value = ClientState(busy = true, url = mutable.value.url, error = "Your session has expired. Please sign in again.")
             } else mutable.update { it.copy(error = when (e) {
-                is HttpException -> "Server returned ${e.code()}: ${e.response()?.errorBody()?.string()?.take(250) ?: e.message()}"
-                else -> e.message ?: "Connection failed. Check the server address and try again."
+                is HttpException -> {
+                    val statusCode = e.code()
+                    if (statusCode in 500..599 || statusCode == 503) {
+                        "Security service is temporarily unavailable. Please try again."
+                    } else if (statusCode == 401) {
+                        "Your session has expired. Please sign in again."
+                    } else {
+                        "The security service could not complete the request. Please try again."
+                    }
+                }
+                else -> "Security service is temporarily unavailable. Please try again."
             }) }
         } finally { mutable.update { it.copy(busy = false, scanning = false) } }
     }
@@ -76,7 +87,7 @@ class ClientViewModel(app: Application) : AndroidViewModel(app) {
     }
     fun refresh() { if (!state.value.busy) work { refreshData() } }
     fun scan(scenario: Scenario) { if (!state.value.busy) {
-        mutable.update { it.copy(result = null, scanning = true) }
+        mutable.update { it.copy(result = null, scanning = true, error = "Connecting to security service...") }
         scanJob = work {
         val result = api.analyze(scenario.telemetry)
         mutable.update { it.copy(result = result) }
@@ -89,14 +100,17 @@ class ClientViewModel(app: Application) : AndroidViewModel(app) {
     fun openIncident(id: Int) { if (!state.value.busy) work { mutable.update { it.copy(selected = null) }; val detail = api.incident(id); mutable.update { it.copy(selected = detail) } } }
     fun closeIncident() { mutable.update { it.copy(selected = null) } }
     fun saveServer(input: String) { if (!state.value.busy) work {
-        val parsed = input.trim().toHttpUrl()
+        val trimmed = input.trim()
+        val parsed = runCatching { trimmed.toHttpUrl() }.getOrElse { throw IllegalArgumentException("Use a secure production URL for the security service.") }
         require(parsed.username.isEmpty() && parsed.password.isEmpty() && parsed.query == null && parsed.fragment == null) { "Use a server URL without credentials, query or fragment." }
+        val host = parsed.host.lowercase()
+        require(host !in setOf("10.0.2.2", "localhost", "127.0.0.1", "0.0.0.0", "::1", "[::1]")) { "Local development URLs are not allowed in the production app. Use the secure production service." }
         val url = parsed.toString().trimEnd('/') + "/"
-        store.saveUrl(url); token = null; connect(url); mutable.value = ClientState(busy = true, url = url)
+        store.saveUrl(url); token = null; connect(url); mutable.value = ClientState(busy = true, url = url, error = "Connecting to security service...")
         val health = api.health(); mutable.update { it.copy(health = health.service + ": " + health.status) }
     } }
     fun logout() { if (!state.value.busy) work {
         store.saveToken(null); token = null; connect(state.value.url)
-        mutable.value = ClientState(busy = true, url = state.value.url)
+        mutable.value = ClientState(busy = true, url = state.value.url, error = "Connecting to security service...")
     } }
 }
