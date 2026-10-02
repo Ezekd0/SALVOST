@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Activity, ShieldAlert, Cpu, Network,  Clock, Server, AlertTriangle } from 'lucide-react';
 import { format } from 'date-fns';
 import api from '../lib/api';
+import ShapExplanation from '../components/ShapExplanation';
 
 export default function IncidentDetails() {
   const { id } = useParams();
@@ -44,11 +45,6 @@ export default function IncidentDetails() {
 
   const { analysis } = incident;
   const { event } = analysis;
-  let explanation = {};
-  try {
-    explanation = JSON.parse(analysis.explanation_json);
-  } catch (e) {}
-
   return (
     <div className="space-y-6">
       <div>
@@ -56,14 +52,14 @@ export default function IncidentDetails() {
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to Registry
         </Link>
-        <div className="flex justify-between items-start">
+        <div className="flex flex-col sm:flex-row gap-3 justify-between items-start">
           <div>
             <h1 className="text-2xl font-bold text-text-light tracking-tight flex items-center">
               Incident INC-{incident.id.toString().padStart(5, '0')}
             </h1>
             <p className="text-sm text-text-muted mt-1">Detected at {format(new Date(incident.created_at), 'yyyy-MM-dd HH:mm:ss')}</p>
           </div>
-          <div className="flex items-center space-x-3">
+          <div className="flex flex-wrap items-center gap-3">
             <span className={`px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wide border ${
               incident.severity === 'Critical' ? 'bg-semantic-critical/20 text-semantic-critical border-semantic-critical/50' :
               incident.severity === 'High' ? 'bg-semantic-danger/20 text-semantic-danger border-semantic-danger/50' :
@@ -81,7 +77,7 @@ export default function IncidentDetails() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Details */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="min-w-0 lg:col-span-2 space-y-6">
           <div className="bg-navy border border-navy-dark rounded-xl shadow-lg overflow-hidden">
             <div className="p-4 border-b border-navy-dark flex items-center bg-[#0B1B2B]/50">
               <ShieldAlert className="h-5 w-5 mr-2 text-teal" />
@@ -108,7 +104,7 @@ export default function IncidentDetails() {
               <h2 className="text-lg font-semibold text-text-light">Network Telemetry</h2>
             </div>
             <div className="p-6">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                 <div className="bg-navy-dark p-3 rounded border border-navy">
                   <p className="text-xs text-text-muted uppercase">Source IP</p>
                   <p className="text-sm font-mono text-text-light mt-1">{event.source_ip}</p>
@@ -148,27 +144,7 @@ export default function IncidentDetails() {
             </div>
             <div className="p-6">
               <p className="text-sm text-text-muted mb-4">Feature importance values contributing to the threat classification.</p>
-              <div className="space-y-3">
-                {Object.entries(explanation).map(([feature, value]: [string, any]) => {
-                  const numValue = Math.abs(parseFloat(value));
-                  const percentage = Math.min(numValue * 100, 100);
-                  const isPositive = parseFloat(value) > 0;
-                  return (
-                    <div key={feature}>
-                      <div className="flex justify-between text-xs mb-1">
-                        <span className="font-mono text-text-light">{feature}</span>
-                        <span className={isPositive ? 'text-semantic-danger' : 'text-teal'}>{value > 0 ? '+' : ''}{value.toFixed(4)}</span>
-                      </div>
-                      <div className="w-full bg-navy-dark rounded-full h-2">
-                        <div 
-                          className={`h-2 rounded-full ${isPositive ? 'bg-semantic-danger' : 'bg-teal'}`} 
-                          style={{ width: `${percentage}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+              <ShapExplanation json={analysis.explanation_json} />
             </div>
           </div>
         </div>
@@ -221,10 +197,11 @@ export default function IncidentDetails() {
               </div>
               
               <div className="mt-8 pt-6 border-t border-navy-dark space-y-3">
-                <button className="w-full py-2 bg-navy-dark border border-teal text-teal hover:bg-teal hover:text-navy-dark transition-colors rounded text-sm font-medium">
+                <p className="text-xs text-text-muted">Status updates and escalation are unavailable in this version.</p>
+                <button disabled title="Not available: no incident update API is connected" className="w-full py-2 bg-navy-dark border border-teal text-teal hover:bg-teal hover:text-navy-dark transition-colors rounded text-sm font-medium">
                   Update Status
                 </button>
-                <button className="w-full py-2 bg-semantic-danger/20 border border-semantic-danger/50 text-semantic-danger hover:bg-semantic-danger hover:text-navy-dark transition-colors rounded text-sm font-medium">
+                <button disabled title="Not available: no incident update API is connected" className="w-full py-2 bg-semantic-danger/20 border border-semantic-danger/50 text-semantic-danger hover:bg-semantic-danger hover:text-navy-dark transition-colors rounded text-sm font-medium">
                   Escalate Incident
                 </button>
               </div>

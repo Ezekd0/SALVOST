@@ -64,14 +64,14 @@ export default function Register() {
         <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-navy-dark to-transparent"></div>
       </div>
 
-      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
+      <div className="px-4 sm:px-0 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="flex justify-center">
           <div className="h-16 w-16 bg-navy-dark border-2 border-teal rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(23,195,178,0.5)]">
             <Shield className="h-10 w-10 text-teal" />
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-text-light tracking-tight">
-          AI-DRIVEN ANDROID RUNTIME THREAT DETECTION AND AUTONOMOUS RESPONSE SYSTEM
+          AI-CTDRS
         </h2>
         <p className="mt-2 text-center text-sm text-text-muted">
           Create Account

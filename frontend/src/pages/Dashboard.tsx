@@ -65,7 +65,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap gap-3 justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-text-light tracking-tight">Global Security Posture</h1>
           <p className="text-sm text-text-muted mt-1">Real-time threat landscape and autonomous response metrics.</p>
@@ -143,7 +143,7 @@ export default function Dashboard() {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 bg-navy border border-navy-dark rounded-xl p-5 shadow-lg">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-wrap gap-3 justify-between items-center mb-6">
               <h2 className="text-lg font-semibold text-text-light">Network Traffic & Threat Volume</h2>
               <div className="flex items-center space-x-4 text-xs">
                 <div className="flex items-center"><span className="w-3 h-3 rounded-full bg-teal mr-2"></span><span className="text-text-muted">Total Events</span></div>

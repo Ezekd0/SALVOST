@@ -144,7 +144,11 @@
   content: "";
   position: absolute;
   pointer-events: none;
-  inset: 0 -100px;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: min(100vw, calc(100% + 200px));
+  transform: translateX(-50%);
   background: radial-gradient(ellipse at 80% 45%, #7137d820, transparent 57%);
 }
 .lp-hero-copy {
@@ -324,6 +328,7 @@
 }
 .lp-visual-caption {
   position: absolute;
+  left: 0;
   bottom: 2%;
   width: 100%;
   text-align: center;

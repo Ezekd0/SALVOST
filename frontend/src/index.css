@@ -7,3 +7,14 @@
     @apply bg-navy-dark text-text-main font-sans;
   }
 }
+
+@layer components {
+  .workspace-main .grid > *, .workspace-main .flex > * { min-width: 0; }
+  .workspace-main p, .workspace-main h1, .workspace-main h2,
+  .workspace-main h3, .workspace-main code { overflow-wrap: anywhere; }
+  .workspace-main input, .workspace-main select { max-width: 100%; }
+  .workspace-main h1 > svg, .workspace-main h2 > svg { flex-shrink: 0; }
+  .workspace-main button:disabled { cursor: not-allowed; opacity: 0.5; }
+  .workspace-main summary { cursor: pointer; }
+  .workspace-main button, .app-shell header button { touch-action: manipulation; }
+}

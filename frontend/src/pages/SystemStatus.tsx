@@ -12,7 +12,7 @@ export default function SystemStatus() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
           <h1 className="text-2xl font-bold text-text-light tracking-tight flex items-center">
             <Activity className="h-6 w-6 mr-2 text-teal" />
@@ -60,7 +60,7 @@ export default function SystemStatus() {
                 )}
               </div>
               
-              <div className="grid grid-cols-2 gap-4 mt-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                 <div>
                   <p className="text-xs text-text-muted uppercase">Status</p>
                   <p className={`font-medium ${isOperational ? 'text-semantic-success' : 'text-semantic-warning'}`}>{comp.status}</p>

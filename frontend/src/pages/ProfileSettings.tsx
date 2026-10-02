@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import { User, Lock, Bell, Shield, LogOut } from 'lucide-react';
+import { useAuth } from '../lib/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function ProfileSettings() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    logout();
     navigate('/login');
   };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
           <h1 className="text-2xl font-bold text-text-light tracking-tight flex items-center">
             <User className="h-6 w-6 mr-2 text-teal" />
@@ -25,7 +27,7 @@ export default function ProfileSettings() {
 
       <div className="bg-navy border border-navy-dark rounded-xl shadow-lg flex flex-col md:flex-row overflow-hidden">
         {/* Sidebar */}
-        <div className="w-full md:w-64 bg-[#070F18] border-r border-navy-dark p-4 flex flex-col space-y-2">
+        <div className="w-full md:w-48 lg:w-64 shrink-0 bg-[#070F18] border-r border-navy-dark p-4 flex flex-col space-y-2">
           <button 
             onClick={() => setActiveTab('profile')}
             className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${activeTab === 'profile' ? 'bg-navy-dark text-teal' : 'text-text-muted hover:bg-navy hover:text-text-light'}`}
@@ -63,24 +65,25 @@ export default function ProfileSettings() {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 p-6 md:p-8">
+        <div className="min-w-0 flex-1 p-4 sm:p-6 md:p-8">
           {activeTab === 'profile' && (
             <div className="max-w-2xl animate-in fade-in">
+              <p className="text-sm text-text-muted mb-4">Preview only: these settings are not connected to a save service.</p>
               <h2 className="text-xl font-bold text-text-light mb-6">Profile Information</h2>
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-text-muted mb-2">Full Name</label>
-                  <input type="text" defaultValue="Demo User" className="w-full bg-[#070F18] border border-navy-dark rounded-md px-4 py-2 text-text-light focus:outline-none focus:border-teal transition-colors" />
+                  <input readOnly type="text" defaultValue="Demo User" className="w-full bg-[#070F18] border border-navy-dark rounded-md px-4 py-2 text-text-light focus:outline-none focus:border-teal transition-colors" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-text-muted mb-2">Email Address</label>
-                  <input type="email" defaultValue="admin@soc-platform.local" className="w-full bg-[#070F18] border border-navy-dark rounded-md px-4 py-2 text-text-light focus:outline-none focus:border-teal transition-colors" />
+                  <input readOnly type="email" defaultValue="admin@soc-platform.local" className="w-full bg-[#070F18] border border-navy-dark rounded-md px-4 py-2 text-text-light focus:outline-none focus:border-teal transition-colors" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-text-muted mb-2">Role</label>
                   <input type="text" disabled defaultValue="Security Analyst" className="w-full bg-[#070F18] border border-navy-dark rounded-md px-4 py-2 text-text-muted opacity-50 cursor-not-allowed" />
                 </div>
-                <button className="px-6 py-2 bg-teal hover:bg-teal-light text-navy-dark font-medium rounded-md transition-colors">
+                <button disabled title="Not available: no supporting service is connected" className="px-6 py-2 bg-teal hover:bg-teal-light text-navy-dark font-medium rounded-md transition-colors">
                   Save Changes
                 </button>
               </div>
@@ -89,25 +92,26 @@ export default function ProfileSettings() {
 
           {activeTab === 'security' && (
             <div className="max-w-2xl animate-in fade-in">
+              <p className="text-sm text-text-muted mb-4">Preview only: these settings are not connected to a save service.</p>
               <h2 className="text-xl font-bold text-text-light mb-6">Security Settings</h2>
               <div className="space-y-6">
                  <div>
                   <label className="block text-sm font-medium text-text-muted mb-2">Current Password</label>
-                  <input type="password" placeholder="••••••••" className="w-full bg-[#070F18] border border-navy-dark rounded-md px-4 py-2 text-text-light focus:outline-none focus:border-teal transition-colors" />
+                  <input disabled type="password" placeholder="••••••••" className="w-full bg-[#070F18] border border-navy-dark rounded-md px-4 py-2 text-text-light focus:outline-none focus:border-teal transition-colors" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-text-muted mb-2">New Password</label>
-                  <input type="password" placeholder="New Password" className="w-full bg-[#070F18] border border-navy-dark rounded-md px-4 py-2 text-text-light focus:outline-none focus:border-teal transition-colors" />
+                  <input disabled type="password" placeholder="New Password" className="w-full bg-[#070F18] border border-navy-dark rounded-md px-4 py-2 text-text-light focus:outline-none focus:border-teal transition-colors" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-text-muted mb-2">Confirm New Password</label>
-                  <input type="password" placeholder="Confirm Password" className="w-full bg-[#070F18] border border-navy-dark rounded-md px-4 py-2 text-text-light focus:outline-none focus:border-teal transition-colors" />
+                  <input disabled type="password" placeholder="Confirm Password" className="w-full bg-[#070F18] border border-navy-dark rounded-md px-4 py-2 text-text-light focus:outline-none focus:border-teal transition-colors" />
                 </div>
                 <div className="flex items-center space-x-3 pt-4 border-t border-navy-dark">
-                  <input type="checkbox" id="2fa" className="h-4 w-4 bg-navy border-navy-dark text-teal rounded focus:ring-teal focus:ring-offset-navy" />
+                  <input type="checkbox" disabled id="2fa" className="h-4 w-4 bg-navy border-navy-dark text-teal rounded focus:ring-teal focus:ring-offset-navy" />
                   <label htmlFor="2fa" className="text-text-light font-medium">Enable Two-Factor Authentication (2FA)</label>
                 </div>
-                <button className="px-6 py-2 bg-teal hover:bg-teal-light text-navy-dark font-medium rounded-md transition-colors mt-4">
+                <button disabled title="Not available: no supporting service is connected" className="px-6 py-2 bg-teal hover:bg-teal-light text-navy-dark font-medium rounded-md transition-colors mt-4">
                   Update Security Settings
                 </button>
               </div>
@@ -116,6 +120,7 @@ export default function ProfileSettings() {
 
           {activeTab === 'notifications' && (
             <div className="max-w-2xl animate-in fade-in">
+              <p className="text-sm text-text-muted mb-4">Preview only: these settings are not connected to a save service.</p>
               <h2 className="text-xl font-bold text-text-light mb-6">Notification Preferences</h2>
               <div className="space-y-4">
                 {[
@@ -129,8 +134,8 @@ export default function ProfileSettings() {
                       <h3 className="font-medium text-text-light">{item.title}</h3>
                       <p className="text-sm text-text-muted mt-1">{item.desc}</p>
                     </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" defaultChecked className="sr-only peer" />
+                    <label className="relative shrink-0 ml-3 inline-flex items-center cursor-not-allowed opacity-50">
+                      <input aria-label={item.title} type="checkbox" disabled defaultChecked className="sr-only peer" />
                       <div className="w-11 h-6 bg-navy border border-navy-dark rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-text-muted after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal peer-checked:after:bg-white"></div>
                     </label>
                   </div>
@@ -141,6 +146,7 @@ export default function ProfileSettings() {
 
           {activeTab === 'api' && (
             <div className="max-w-2xl animate-in fade-in">
+              <p className="text-sm text-text-muted mb-4">Preview only: these settings are not connected to a save service.</p>
                <h2 className="text-xl font-bold text-text-light mb-6">API Access</h2>
                <p className="text-text-muted mb-6">Manage your API keys for programmatic access to the threat detection engine.</p>
                
@@ -153,13 +159,13 @@ export default function ProfileSettings() {
                     <code className="flex-1 bg-navy px-3 py-2 rounded border border-navy-dark text-teal font-mono text-sm overflow-hidden text-ellipsis">
                       ai_ctdrs_sk_••••••••••••••••••••••••
                     </code>
-                    <button className="p-2 border border-navy-dark rounded bg-navy hover:bg-navy-dark text-text-light transition-colors">
+                    <button disabled title="Not available: no supporting service is connected" className="p-2 border border-navy-dark rounded bg-navy hover:bg-navy-dark text-text-light transition-colors">
                       Copy
                     </button>
                  </div>
                </div>
 
-               <button className="px-6 py-2 border border-teal text-teal hover:bg-teal hover:bg-opacity-10 font-medium rounded-md transition-colors">
+               <button disabled title="Not available: no supporting service is connected" className="px-6 py-2 border border-teal text-teal hover:bg-teal hover:bg-opacity-10 font-medium rounded-md transition-colors">
                   Generate New API Key
                 </button>
             </div>

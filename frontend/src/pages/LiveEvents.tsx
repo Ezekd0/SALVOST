@@ -22,6 +22,9 @@ interface SecurityEvent {
 export default function LiveEvents() {
   const [events, setEvents] = useState<SecurityEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState('');
+
 
   const fetchEvents = async () => {
     try {
@@ -42,9 +45,12 @@ export default function LiveEvents() {
     return () => clearInterval(interval);
   }, []);
 
+  const filtered = events.filter(item => [item.source_ip, item.destination_ip, item.destination_port].join(' ').toLowerCase().includes(query.toLowerCase()) && (!filter || item.analysis?.classification === filter));
+  const visible = filtered;
+
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
           <h1 className="text-2xl font-bold text-text-light tracking-tight flex items-center">
             <Activity className="h-6 w-6 mr-2 text-teal" />
@@ -52,21 +58,26 @@ export default function LiveEvents() {
           </h1>
           <p className="text-sm text-text-muted mt-1">Real-time stream of network flow data ingested into the ML pipeline.</p>
         </div>
-        <div className="flex space-x-3">
-          <div className="relative">
+        <div className="flex flex-wrap gap-3 w-full sm:w-auto">
+          <div className="relative flex-1 min-w-0">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Search className="h-4 w-4 text-text-muted" />
             </div>
             <input
-              type="text"
-              className="block w-64 pl-10 bg-navy-dark border border-navy rounded-md py-2 text-sm text-text-light focus:outline-none focus:ring-1 focus:ring-teal focus:border-teal placeholder-text-muted"
+              type="search" aria-label="Search events" value={query} onChange={e => { setQuery(e.target.value); }}
+              className="block w-full sm:w-64 pl-10 bg-navy-dark border border-navy rounded-md py-2 text-sm text-text-light focus:outline-none focus:ring-1 focus:ring-teal focus:border-teal placeholder-text-muted"
               placeholder="Search IP or Port..."
             />
           </div>
-          <button className="flex items-center px-4 py-2 bg-navy-dark border border-navy rounded-md text-sm text-text-light hover:bg-navy transition-colors focus:outline-none focus:ring-2 focus:ring-teal">
-            <Filter className="h-4 w-4 mr-2 text-text-muted" />
-            Filters
-          </button>
+          <details className="relative self-start">
+            <summary className="px-4 py-2 bg-navy-dark border border-navy rounded-md text-sm text-text-light"><Filter className="inline-block h-4 w-4 mr-2 text-text-muted" />Filters{filter ? `: ${filter}` : ''}</summary>
+            <div className="absolute right-0 top-full mt-2 z-20 w-56 p-3 bg-navy-dark border border-teal rounded-md shadow-lg">
+              <label className="block text-xs text-text-muted mb-2" htmlFor="events-filter">Classification</label>
+              <select id="events-filter" value={filter} onChange={e => { setFilter(e.target.value); }} className="w-full bg-navy text-text-light border border-navy rounded p-2 text-sm">
+                <option value="">All classification values</option><option value="Benign">Benign</option><option value="Port Scan">Port Scan</option><option value="Brute Force">Brute Force</option><option value="DDoS">DDoS</option><option value="Malware Traffic">Malware Traffic</option>
+              </select>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -84,7 +95,7 @@ export default function LiveEvents() {
               </tr>
             </thead>
             <tbody className="divide-y divide-navy-dark bg-navy relative">
-              {isLoading && events.length === 0 ? (
+              {isLoading && visible.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-text-muted">
                     <div className="flex justify-center items-center">
@@ -93,14 +104,14 @@ export default function LiveEvents() {
                     </div>
                   </td>
                 </tr>
-              ) : events.length === 0 ? (
+              ) : visible.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-text-muted">
-                    No network events detected.
+                    {events.length ? 'No events match the current search and filter.' : 'No network events detected.'}
                   </td>
                 </tr>
               ) : (
-                events.map((evt) => (
+                visible.map((evt) => (
                   <tr key={evt.id} className="hover:bg-navy-dark transition-colors font-mono text-sm">
                     <td className="px-6 py-4 whitespace-nowrap text-text-muted">
                       {format(new Date(evt.timestamp), 'HH:mm:ss.SSS')}

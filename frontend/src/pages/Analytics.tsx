@@ -20,7 +20,7 @@ const modelMetrics = [
 export default function Analytics() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
           <h1 className="text-2xl font-bold text-text-light tracking-tight flex items-center">
             <BarChart2 className="h-6 w-6 mr-2 text-teal" />
@@ -30,7 +30,7 @@ export default function Analytics() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
         <div className="bg-navy border border-navy-dark rounded-xl p-5 shadow-lg flex items-center">
           <div className="p-3 bg-teal bg-opacity-20 rounded-lg mr-4">
             <Activity className="h-6 w-6 text-teal" />

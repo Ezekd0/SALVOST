@@ -10,15 +10,15 @@ const mockReports = [
 export default function Reports() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
           <h1 className="text-2xl font-bold text-text-light tracking-tight flex items-center">
             <FileText className="h-6 w-6 mr-2 text-teal" />
             Automated Reporting
           </h1>
-          <p className="text-sm text-text-muted mt-1">Generate and export security compliance and incident reports.</p>
+          <p className="text-sm text-text-muted mt-1">Report preview. Generation and downloads are not connected to a report service.</p>
         </div>
-        <button className="px-4 py-2 bg-teal hover:bg-teal-light text-navy-dark font-medium rounded-md transition-colors flex items-center">
+        <button disabled title="Report generation is not connected to a service" className="px-4 py-2 bg-teal hover:bg-teal-light text-navy-dark font-medium rounded-md transition-colors flex items-center">
           <FileText className="h-4 w-4 mr-2" />
           Generate New Report
         </button>
@@ -38,6 +38,7 @@ export default function Reports() {
           </div>
         </div>
         
+        <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-navy-dark">
           <thead className="bg-[#070F18]">
             <tr>
@@ -73,7 +74,7 @@ export default function Reports() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button 
-                    disabled={report.status !== 'Generated'}
+                    disabled aria-label={`Download ${report.name} (unavailable)`} title="Preview report: no downloadable file is available"
                     className="inline-flex items-center text-text-muted hover:text-teal disabled:opacity-30 disabled:hover:text-text-muted transition-colors"
                   >
                     <Download className="h-5 w-5" />
@@ -83,6 +84,7 @@ export default function Reports() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

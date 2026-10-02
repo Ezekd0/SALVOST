@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Play, Crosshair, ShieldAlert, Cpu, Network, CheckCircle } from 'lucide-react';
 import api from '../lib/api';
+import ShapExplanation from '../components/ShapExplanation';
 
 export default function ThreatAnalysis() {
   const [formData, setFormData] = useState({
@@ -128,38 +129,38 @@ export default function ThreatAnalysis() {
               ))}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-text-muted mb-1">Source IP</label>
-                <input type="text" name="source_ip" value={formData.source_ip} onChange={handleChange} className="w-full bg-navy-dark border border-navy rounded p-2 text-sm text-text-light focus:outline-none focus:border-teal" />
+                <label htmlFor="source_ip" className="block text-xs font-medium text-text-muted mb-1">Source IP</label>
+                <input type="text" id="source_ip" name="source_ip" value={formData.source_ip} onChange={handleChange} className="w-full bg-navy-dark border border-navy rounded p-2 text-sm text-text-light focus:outline-none focus:border-teal" />
               </div>
               <div>
-                <label className="block text-xs font-medium text-text-muted mb-1">Dest IP</label>
-                <input type="text" name="destination_ip" value={formData.destination_ip} onChange={handleChange} className="w-full bg-navy-dark border border-navy rounded p-2 text-sm text-text-light focus:outline-none focus:border-teal" />
+                <label htmlFor="destination_ip" className="block text-xs font-medium text-text-muted mb-1">Destination IP</label>
+                <input type="text" id="destination_ip" name="destination_ip" value={formData.destination_ip} onChange={handleChange} className="w-full bg-navy-dark border border-navy rounded p-2 text-sm text-text-light focus:outline-none focus:border-teal" />
               </div>
               <div>
-                <label className="block text-xs font-medium text-text-muted mb-1">Dest Port</label>
-                <input type="number" name="destination_port" value={formData.destination_port} onChange={handleChange} className="w-full bg-navy-dark border border-navy rounded p-2 text-sm text-text-light focus:outline-none focus:border-teal" />
+                <label htmlFor="destination_port" className="block text-xs font-medium text-text-muted mb-1">Destination Port</label>
+                <input type="number" id="destination_port" name="destination_port" value={formData.destination_port} onChange={handleChange} className="w-full bg-navy-dark border border-navy rounded p-2 text-sm text-text-light focus:outline-none focus:border-teal" />
               </div>
               <div>
-                <label className="block text-xs font-medium text-text-muted mb-1">Protocol</label>
-                <select name="protocol" value={formData.protocol} onChange={handleChange} className="w-full bg-navy-dark border border-navy rounded p-2 text-sm text-text-light focus:outline-none focus:border-teal">
+                <label htmlFor="protocol" className="block text-xs font-medium text-text-muted mb-1">Protocol</label>
+                <select id="protocol" name="protocol" value={formData.protocol} onChange={handleChange} className="w-full bg-navy-dark border border-navy rounded p-2 text-sm text-text-light focus:outline-none focus:border-teal">
                   <option value="TCP">TCP</option>
                   <option value="UDP">UDP</option>
                   <option value="ICMP">ICMP</option>
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-text-muted mb-1">Flow Duration (s)</label>
-                <input type="number" step="0.01" name="flow_duration" value={formData.flow_duration} onChange={handleChange} className="w-full bg-navy-dark border border-navy rounded p-2 text-sm text-text-light focus:outline-none focus:border-teal" />
+                <label htmlFor="flow_duration" className="block text-xs font-medium text-text-muted mb-1">Flow Duration (s)</label>
+                <input type="number" step="0.01" id="flow_duration" name="flow_duration" value={formData.flow_duration} onChange={handleChange} className="w-full bg-navy-dark border border-navy rounded p-2 text-sm text-text-light focus:outline-none focus:border-teal" />
               </div>
               <div>
-                <label className="block text-xs font-medium text-text-muted mb-1">Packet Rate (p/s)</label>
-                <input type="number" name="packet_rate" value={formData.packet_rate} onChange={handleChange} className="w-full bg-navy-dark border border-navy rounded p-2 text-sm text-text-light focus:outline-none focus:border-teal" />
+                <label htmlFor="packet_rate" className="block text-xs font-medium text-text-muted mb-1">Packet Rate (p/s)</label>
+                <input type="number" id="packet_rate" name="packet_rate" value={formData.packet_rate} onChange={handleChange} className="w-full bg-navy-dark border border-navy rounded p-2 text-sm text-text-light focus:outline-none focus:border-teal" />
               </div>
               <div>
-                <label className="block text-xs font-medium text-text-muted mb-1">Bytes Rate (b/s)</label>
-                <input type="number" name="bytes_rate" value={formData.bytes_rate} onChange={handleChange} className="w-full bg-navy-dark border border-navy rounded p-2 text-sm text-text-light focus:outline-none focus:border-teal" />
+                <label htmlFor="bytes_rate" className="block text-xs font-medium text-text-muted mb-1">Byte Rate (B/s)</label>
+                <input type="number" id="bytes_rate" name="bytes_rate" value={formData.bytes_rate} onChange={handleChange} className="w-full bg-navy-dark border border-navy rounded p-2 text-sm text-text-light focus:outline-none focus:border-teal" />
               </div>
             </div>
           </div>
@@ -191,14 +192,14 @@ export default function ThreatAnalysis() {
           
           <div className="p-5 flex-1 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMSIgZmlsbD0icmdiYSgyMywgMTk1LCAxNzgsIDAuMikiLz48L3N2Zz4=')]">
             {!result && !isLoading && (
-              <div className="h-full flex flex-col items-center justify-center text-text-muted">
+              <div className="min-h-48 h-full flex flex-col items-center justify-center text-center text-text-muted">
                 <Crosshair className="h-12 w-12 mb-4 opacity-20" />
                 <p>Awaiting event injection...</p>
               </div>
             )}
             
             {isLoading && (
-              <div className="h-full flex flex-col items-center justify-center text-teal">
+              <div className="min-h-48 h-full flex flex-col items-center justify-center text-center text-teal">
                 <div className="animate-spin h-12 w-12 border-4 border-teal border-t-transparent rounded-full mb-4"></div>
                 <p className="animate-pulse font-mono">ANALYZING SIGNATURES...</p>
               </div>
@@ -211,7 +212,7 @@ export default function ThreatAnalysis() {
                     ? 'bg-semantic-success/10 border-semantic-success/30 text-semantic-success' 
                     : 'bg-semantic-danger/10 border-semantic-danger/30 text-semantic-danger'
                 }`}>
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap gap-4 items-center justify-between">
                     <div className="flex items-center">
                       {result.analysis.classification === 'Benign' ? <CheckCircle className="h-8 w-8 mr-3" /> : <ShieldAlert className="h-8 w-8 mr-3 animate-pulse" />}
                       <div>
@@ -226,10 +227,10 @@ export default function ThreatAnalysis() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="bg-navy-dark p-3 rounded border border-navy">
                     <p className="text-xs text-text-muted uppercase">Threat Score</p>
-                    <p className="text-lg font-mono text-text-light mt-1">{(result.analysis.threat_score * 100).toFixed(0)} / 100</p>
+                    <p className="text-lg font-mono text-text-light mt-1">{result.analysis.threat_score.toFixed(0)} / 100</p>
                   </div>
                   <div className="bg-navy-dark p-3 rounded border border-navy">
                     <p className="text-xs text-text-muted uppercase">Event ID</p>
@@ -248,9 +249,7 @@ export default function ThreatAnalysis() {
                 
                 <div>
                    <h4 className="text-sm font-semibold text-text-light mb-2 border-b border-navy-dark pb-1">SHAP Feature Importance</h4>
-                   <div className="bg-navy-dark p-3 rounded border border-navy text-xs font-mono text-text-muted overflow-auto max-h-32">
-                     <pre>{JSON.stringify(JSON.parse(result.analysis.explanation_json), null, 2)}</pre>
-                   </div>
+                   <ShapExplanation json={result.analysis.explanation_json} />
                 </div>
               </div>
             )}

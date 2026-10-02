@@ -36,7 +36,7 @@ export default function ResponseCenter() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
           <h1 className="text-2xl font-bold text-text-light tracking-tight flex items-center">
             <Server className="h-6 w-6 mr-2 text-teal" />
